@@ -10,6 +10,12 @@ from server import run_server, wait_for_port, PORT
 
 
 if __name__ == "__main__":
+    # In the frozen .app, multiprocessing helpers (e.g. tqdm's lock used during
+    # model download/transcription) re-launch sys.executable — which is this
+    # app. Without this, each one opens a second window over the active one.
+    import multiprocessing
+    multiprocessing.freeze_support()
+
     import webview
     from jsapi import JsApi
 
